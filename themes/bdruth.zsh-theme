@@ -43,15 +43,20 @@ ZSH_THEME_GIT_PROMPT_SHA_AFTER="%{$WHITE%}]"
 PROMPT='
 %{$GREEN_BOLD%}%n@%m%{$WHITE%}:%{$YELLOW%}%~%u$(parse_git_dirty)$(git_prompt_ahead)%{$RESET_COLOR%}
 %{$BLUE%}>%{$RESET_COLOR%} '
-RPROMPT='%{$GREEN_BOLD%}$(current_branch)$(git_prompt_short_sha)$(git_prompt_status)%{$RESET_COLOR%}'
+#RPROMPT='%{$GREEN_BOLD%}$(current_branch)$(git_prompt_short_sha)$(git_prompt_status)%{$RESET_COLOR%}'
 
 # elaborate exitcode on the right when >0
 return_code_enabled="%(?..%{$fg[red]%}%? << %{$reset_color%})"
 return_code_disabled=
 return_code=$return_code_enabled
 
+git_prompt_tag() {
+    DESCR=$(git describe --tags --always 2>/dev/null) || $(git_prompt_short_sha)
+    echo "$ZSH_THEME_GIT_PROMPT_SHA_BEFORE$DESCR$ZSH_THEME_GIT_PROMPT_SHA_AFTER"
+}
+
 #RPS1='${return_code}'
-RPROMPT='${return_code}%{$GREEN_BOLD%}$(current_branch)$(git_prompt_short_sha)$(git_prompt_status)%{$RESET_COLOR%}'
+RPROMPT='${return_code}%{$GREEN_BOLD%}$(current_branch)$(git_prompt_tag)$(git_prompt_status)%{$RESET_COLOR%}'
 
 #function accept-line-or-clear-warning () {
 #	if [[ -z $BUFFER ]]; then
